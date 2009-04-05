@@ -1,0 +1,24 @@
+h1. IRClerk - Sinatra + CouchDB + Marvin == IRC logging goodness
+
+h2. Getting started
+
+Firstly, Clone this repo and then change to the top level directory.
+
+Next, run the following commands to prepare your database:
+
+@./couchdb-setup/reset-database@
+@./couchdb-setup/import-views@
+
+Now, to use the irc bot, you'll need two things:
+
+# The marvin gem - use @sudo gem install Sutto-marvin --source=https://gems.github.com/@
+# Edit @irc-bot/config/settings.yml@ and @irc-bot/config/connections.yml@
+
+Next, start up the logger bot:
+  
+  @marvin client irc-bot -v@
+  
+Optionally, you can add -d if you want to run it in the background.
+
+If you now check the channels / write a few messages, and then check the db using futon
+(the couchdb web admin interface, you should see they've been logged.)
