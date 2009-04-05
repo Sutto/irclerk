@@ -1,0 +1,23 @@
+%h2
+  IRC Logs for 
+  %span.chan-name&= @channel.name
+
+- if @messages.empty?
+
+  .empty-messages
+    Alas, there are no messages here. Why not
+    %a{:href => @channel.recent_path} check out the most recent messages
+    or just press the back button?
+
+- else
+
+  .messages
+    - @messages.each do |message|
+      .message
+        %span.received-at= message.received_at.strftime("%I:%M %p").downcase
+        %span.nick&= message.origin
+        %span.message&= message.message
+
+  .pagination
+    = newer_link
+    = older_link

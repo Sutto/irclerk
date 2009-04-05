@@ -1,0 +1,6 @@
+%h2 All Channels
+
+%ul.channels
+  - @channels.each do |channel|
+    %li.channel-link
+      %a{:href => channel.recent_path, :title => "View recent logs for #{channel.name}"}&= channel.name
