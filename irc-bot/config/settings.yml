@@ -1,0 +1,7 @@
+default:
+  user: IRCLerk
+  name: IRCLerk
+  nicks:
+    - irclerk
+    - irclerk_
+    - irclerk__

@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'couchrest'
+
+puts "Importing views..."
+
+db_uri = File.read(File.join(File.dirname(__FILE__), "..", "database_uri")).strip
+db = CouchRest.database!(db_uri)
+
+view_files = Dir[File.join(File.dirname(__FILE__), "views", "*", "*.*.js")]
+views = {}
+view_files.each do |vf|
+  if vf =~ /^(.*)\/(\w+)\/(\w+)\.(\w+)\.js$/
+    views[$2] ||= {}
+    views[$2][$3.to_sym] ||= {}
+    views[$2][$3.to_sym][$4.to_sym] = File.read(File.expand_path(vf))
+  end
+end
+
+views.each do |design, options|
+  if (doc = db.get("_design/#{design}") rescue nil)
+    db.delete_doc(doc)
+  end
+  db.save_doc({"_id" => "_design/#{design}", :views => views[design]}) unless ENV['SKIPADD']
+end

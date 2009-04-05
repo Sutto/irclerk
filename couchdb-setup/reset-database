@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'couchrest'
+
+puts "Resetting database..."
+
+db_uri = File.read(File.join(File.dirname(__FILE__), "..", "database_uri")).strip
+CouchRest.database!(db_uri).recreate!
