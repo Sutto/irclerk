@@ -12,13 +12,17 @@ Sinatra::Base.set :logging, false
 
 require 'application'
 
+ENV['SILENTIMPORT'] = 'true'
+SiteConfig.db_uri += "-test"
+
+def reset_database!
+  system File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "couchdb-setup", "initialize-database")), SiteConfig.db_uri
+end
+
 Spec::Runner.configure do |config|
+  
   config.before(:each) do
-    begin
-      CouchRest.delete((SiteConfig.url_base_db || '') + SiteConfig.db_name)
-    rescue RestClient::ResourceNotFound
-    ensure
-      CouchRest.database!((SiteConfig.url_base_db || '') + SiteConfig.db_name)
-    end
+    reset_database!
   end
+  
 end

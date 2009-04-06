@@ -1,5 +1,4 @@
 require 'couchrest'
-require 'stringex'
 
 class CouchLogger < Marvin::LoggingHandler
   

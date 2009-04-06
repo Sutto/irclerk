@@ -2,10 +2,14 @@
 require 'rubygems'
 require 'couchrest'
 
-puts "Importing views..."
+puts "Importing views..." unless ENV['SILENTIMPORT']
 
-db_uri = File.read(File.join(File.dirname(__FILE__), "..", "database_uri")).strip
+db_uri = ARGV[0] || File.read(File.join(File.dirname(__FILE__), "..", "database_uri")).strip
+
+puts "Using database: #{db_uri}" unless ENV['SILENTIMPORT']
+
 db = CouchRest.database!(db_uri)
+db.recreate!
 
 view_files = Dir[File.join(File.dirname(__FILE__), "views", "*", "*.*.js")]
 views = {}
@@ -17,9 +21,10 @@ view_files.each do |vf|
   end
 end
 
+docs = []
+
 views.each do |design, options|
-  if (doc = db.get("_design/#{design}") rescue nil)
-    db.delete_doc(doc)
-  end
-  db.save_doc({"_id" => "_design/#{design}", :views => views[design]}) unless ENV['SKIPADD']
+  docs << {"_id" => "_design/#{design}", :views => views[design]}
 end
+
+db.bulk_save(docs) unless ENV['SKIPADD']

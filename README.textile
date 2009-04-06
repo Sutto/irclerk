@@ -6,9 +6,7 @@ Firstly, Clone this repo and then change to the top level directory.
 
 Next, run the following commands to prepare your database:
 
-  @./couchdb-setup/reset-database@
-
-  @./couchdb-setup/import-views@
+  @./couchdb-setup/initialize-database@
 
 Now, to use the irc bot, you'll need two things:
 
